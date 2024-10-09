@@ -18,23 +18,29 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout repo content
+        uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - name: setup python
+        uses: actions/setup-python@v4
         with:
-          enable-cache: true
-          cache-dependency-glob: |
-                        *.py
+          python-version: 3.12 #install the python needed
 
       - name: Generate Feed
         run: |
           export DISPLAY=:99
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          python3.12 -m venv venv
+          source venv/bin/activate
+          echo "VIRTUAL ENV:" $VIRTUAL_ENV
           pip install playwright==1.40.0
+          pip install -r requirements.txt
           python -m playwright install
 
-          uv run main.py          
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: ":pencil: Updates rss.xml"
+          python main.py
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit --allow-empty -m "Latest Azure AI News Stories"
+          git push

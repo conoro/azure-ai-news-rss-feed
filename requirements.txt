@@ -1,0 +1,3 @@
+feedgenerator
+bs4
+requests
