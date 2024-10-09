@@ -1,0 +1,40 @@
+# .github/workflows/schedule.yml
+name: Update Azure AI RSS Feed
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Once a day at 12 AM
+    - cron: 0 12 * * *
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: |
+                        *.py
+
+      - name: Generate Feed
+        run: |
+          export DISPLAY=:99
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          pip install playwright==1.40.0
+          python -m playwright install
+
+          uv run main.py          
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ":pencil: Updates rss.xml"
