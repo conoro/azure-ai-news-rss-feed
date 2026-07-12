@@ -5,9 +5,9 @@ Quick and dirty RSS feed generator for the [Azure AI News page](https://learn.mi
 
 - Feed available on:
 
-`https://raw.githubusercontent.com/conoro/azure-ai-news-rss-feed/refs/heads/main/rss.xml`
+`https://conoro.github.io/azure-ai-news-rss-feed/rss.xml`
 
-- Tested working on Feedly.
+- Tested working on Feedly and FreshRSS.
 
 - Shows some empty headings which I must clean up at some stage.
 
